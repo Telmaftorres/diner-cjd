@@ -1,11 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
-import { Resend } from 'resend'
+import * as Brevo from '@getbrevo/brevo'
 import { emailConfirmation, emailAdminNouvelleInscription } from '@/lib/emails'
 import { DATES, MAX_PER_DATE } from '@/lib/dates'
 import crypto from 'crypto'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const apiInstance = new Brevo.TransactionalEmailsApi()
+apiInstance.setApiKey(Brevo.TransactionalEmailsApiApiKeys.apiKey, process.env.BREVO_API_KEY!)
+
+async function sendEmail(to: string, subject: string, html: string) {
+  const email = new Brevo.SendSmtpEmail()
+  email.subject = subject
+  email.htmlContent = html
+  email.sender = { name: 'Dîner CJD', email: 'telma@kontfeel.fr' }
+  email.to = [{ email: to }]
+  await apiInstance.sendTransacEmail(email)
+}
 
 export async function POST(req: NextRequest) {
   const { prenom, nom, email, tel, dateId } = await req.json()
@@ -58,20 +68,10 @@ export async function POST(req: NextRequest) {
   const dateLabel = date.label + ' ' + date.sub
 
   const { html, subject } = emailConfirmation({ prenom, nom, dateLabel, cancelToken, baseUrl })
-  await resend.emails.send({
-    from: 'onboarding@resend.dev',
-    to: email,
-    subject,
-    html,
-  })
+  await sendEmail(email, subject, html)
 
   const admin = emailAdminNouvelleInscription({ prenom, nom, email, tel, dateLabel, totalInscrits: newCount ?? 1 })
-  await resend.emails.send({
-    from: 'onboarding@resend.dev',
-    to: process.env.ADMIN_EMAIL!,
-    subject: admin.subject,
-    html: admin.html,
-  })
+  await sendEmail(process.env.ADMIN_EMAIL!, admin.subject, admin.html)
 
   return NextResponse.json({ ok: true })
 }

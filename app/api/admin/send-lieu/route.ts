@@ -1,9 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
-import { Resend } from 'resend'
+import * as Brevo from '@getbrevo/brevo'
 import { emailLieu } from '@/lib/emails'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const apiInstance = new Brevo.TransactionalEmailsApi()
+apiInstance.setApiKey(Brevo.TransactionalEmailsApiApiKeys.apiKey, process.env.BREVO_API_KEY!)
+
+async function sendEmail(to: string, subject: string, html: string) {
+  const email = new Brevo.SendSmtpEmail()
+  email.subject = subject
+  email.htmlContent = html
+  email.sender = { name: 'Dîner CJD', email: 'telma@kontfeel.fr' }
+  email.to = [{ email: to }]
+  await apiInstance.sendTransacEmail(email)
+}
 
 export async function POST(req: NextRequest) {
   const { dateId, lieu, horaire, adminSecret } = await req.json()
@@ -28,12 +38,7 @@ export async function POST(req: NextRequest) {
       lieu,
       horaire,
     })
-    await resend.emails.send({
-      from: 'onboarding@resend.dev',
-      to: inscrit.email,
-      subject,
-      html,
-    })
+    await sendEmail(inscrit.email, subject, html)
     sent++
   }
 
