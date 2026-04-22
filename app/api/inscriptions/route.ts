@@ -5,8 +5,6 @@ import { emailConfirmation, emailAdminNouvelleInscription } from '@/lib/emails'
 import { DATES, MAX_PER_DATE } from '@/lib/dates'
 import crypto from 'crypto'
 
-const ADMIN_EMAIL = 'baptiste@kontfeel.fr'
-
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: Number(process.env.SMTP_PORT),
@@ -79,12 +77,16 @@ export async function POST(req: NextRequest) {
   const { html, subject } = emailConfirmation({ prenom, nom, dateLabel, cancelToken, baseUrl })
   await sendEmail(email, subject, html)
 
-  const admin = emailAdminNouvelleInscription({
-    prenom, nom, email, tel, dateLabel,
-    totalInscrits: newCount ?? 1,
-    adminUrl: `${baseUrl}/admin`,
-  })
-  await sendEmail(ADMIN_EMAIL, admin.subject, admin.html)
+  try {
+    const admin = emailAdminNouvelleInscription({
+      prenom, nom, email, tel, dateLabel,
+      totalInscrits: newCount ?? 1,
+      adminUrl: `${baseUrl}/admin`,
+    })
+    await sendEmail(process.env.ADMIN_EMAIL!, admin.subject, admin.html)
+  } catch (e: any) {
+    console.error('Erreur email admin:', e.message)
+  }
 
   return NextResponse.json({ ok: true })
 }
