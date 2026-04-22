@@ -3,10 +3,11 @@ import { useState } from 'react'
 import { useParams } from 'next/navigation'
 
 const S = {
-  wrap: { maxWidth: '480px', width: '100%', fontFamily: '-apple-system, Arial, sans-serif' } as React.CSSProperties,
+  page: { minHeight: '100vh', background: '#f8f8f6', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem 1rem' } as React.CSSProperties,
+  wrap: { maxWidth: '520px', width: '100%', fontFamily: '-apple-system, Arial, sans-serif' } as React.CSSProperties,
   header: { textAlign: 'center' as const, padding: '2.5rem 1.5rem', background: '#fff', borderRadius: '16px', marginBottom: '1.5rem', border: '0.5px solid #e8e8e4' },
-  h1: { color: '#111', fontSize: '20px', fontWeight: 600, margin: '1rem 0 0.5rem' },
-  sub: { color: '#888', fontSize: '14px', lineHeight: 1.8, margin: 0 },
+  h1: { color: '#111', fontSize: '22px', fontWeight: 600, margin: '1rem 0 0.5rem' },
+  sub: { color: '#888', fontSize: '15px', lineHeight: 1.8, margin: 0 },
   label: { display: 'block', fontSize: '14px', color: '#555', marginBottom: '8px' },
   input: { width: '100%', padding: '14px 16px', border: '0.5px solid #ddd', borderRadius: '10px', background: '#fff', color: '#111', fontSize: '16px', outline: 'none', boxSizing: 'border-box' as const },
   field: { marginBottom: '1.25rem' } as React.CSSProperties,
@@ -41,48 +42,59 @@ export default function AdminForm() {
   }
 
   if (status === 'success') return (
-    <div style={{ ...S.wrap, textAlign: 'center', padding: '3rem 1.5rem', background: '#fff', border: '0.5px solid #e8e8e4', borderRadius: '16px' }}>
-      <p style={{ fontSize: '36px', marginBottom: '1.25rem' }}>🌹</p>
-      <h2 style={{ color: '#111', fontSize: '20px', fontWeight: 600, marginBottom: '0.75rem' }}>Merci Baptiste !</h2>
-      <p style={{ color: '#888', fontSize: '14px', lineHeight: 1.8 }}>Le lieu et l'horaire sont enregistrés. Les invités seront prévenus automatiquement à J-10.</p>
+    <div style={S.page}>
+      <div style={{ ...S.wrap, textAlign: 'center', padding: '3rem 1.5rem', background: '#fff', border: '0.5px solid #e8e8e4', borderRadius: '16px' }}>
+        <p style={{ fontSize: '40px', marginBottom: '1.25rem' }}>🌹</p>
+        <h2 style={{ color: '#111', fontSize: '20px', fontWeight: 600, marginBottom: '0.75rem' }}>Merci Baptiste !</h2>
+        <p style={{ color: '#888', fontSize: '15px', lineHeight: 1.8 }}>
+          Le lieu et l'horaire sont enregistrés.<br />
+          Les invités seront prévenus automatiquement à J-10.
+        </p>
+      </div>
     </div>
   )
 
   return (
-    <div style={S.wrap}>
-      <div style={S.header}>
-        <p style={{ fontSize: '36px', margin: 0 }}>🌹</p>
-        <h1 style={S.h1}>Dîner surprise</h1>
-        <p style={S.sub}>Renseignez le lieu et l'horaire du prochain dîner.</p>
+    <div style={S.page}>
+      <div style={S.wrap}>
+        <div style={S.header}>
+          <p style={{ fontSize: '40px', margin: 0 }}>🌹</p>
+          <h1 style={S.h1}>Dîner surprise</h1>
+          <p style={S.sub}>Renseignez le lieu et l'horaire<br />du prochain dîner.</p>
+        </div>
+
+        <div style={S.sectionLabel}>Informations du dîner</div>
+
+        <div style={S.field}>
+          <label style={S.label}>Lieu</label>
+          <input
+            style={S.input}
+            value={lieu}
+            onChange={e => setLieu(e.target.value)}
+            placeholder="Restaurant Le Clarence, 31 avenue Franklin D. Roosevelt, Paris"
+          />
+        </div>
+
+        <div style={S.field}>
+          <label style={S.label}>Horaire</label>
+          <input
+            style={S.input}
+            value={horaire}
+            onChange={e => setHoraire(e.target.value)}
+            placeholder="19h30"
+          />
+        </div>
+
+        {errMsg && <p style={S.err}>{errMsg}</p>}
+
+        <button style={S.submitBtn} onClick={submit} disabled={status === 'loading'}>
+          {status === 'loading' ? 'Enregistrement…' : 'Confirmer'}
+        </button>
+
+        <p style={{ textAlign: 'center', fontSize: '12px', color: '#ccc', marginTop: '1.5rem', lineHeight: 1.6 }}>
+          Ce lien est à usage unique. Les invités seront prévenus automatiquement.
+        </p>
       </div>
-
-      <div style={S.sectionLabel}>Informations du dîner</div>
-
-      <div style={S.field}>
-        <label style={S.label}>Lieu</label>
-        <input
-          style={S.input}
-          value={lieu}
-          onChange={e => setLieu(e.target.value)}
-          placeholder="Restaurant Le ..."
-        />
-      </div>
-
-      <div style={S.field}>
-        <label style={S.label}>Horaire</label>
-        <input
-          style={S.input}
-          value={horaire}
-          onChange={e => setHoraire(e.target.value)}
-          placeholder="19h30"
-        />
-      </div>
-
-      {errMsg && <p style={S.err}>{errMsg}</p>}
-
-      <button style={S.submitBtn} onClick={submit} disabled={status === 'loading'}>
-        {status === 'loading' ? 'Enregistrement…' : 'Confirmer'}
-      </button>
     </div>
   )
 }
