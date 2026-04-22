@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
 
   const today = new Date()
   const target = new Date(today)
-  target.setDate(today.getDate() + 14)
+  target.setDate(today.getDate() + 0) // test avec aujourd'hui
   const targetId = target.toISOString().split('T')[0]
 
   const date = DATES.find(d => d.id === targetId)
