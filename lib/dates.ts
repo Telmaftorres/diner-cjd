@@ -1,14 +1,14 @@
 export const DATES = [
-  { id: '2025-09-11', label: 'Jeudi 11 sept.', sub: '2025' },
-  { id: '2025-10-09', label: 'Jeudi 9 oct.',   sub: '2025' },
-  { id: '2025-11-13', label: 'Jeudi 13 nov.',  sub: '2025' },
-  { id: '2025-12-11', label: 'Jeudi 11 déc.',  sub: '2025' },
-  { id: '2026-01-08', label: 'Jeudi 8 jan.',   sub: '2026' },
-  { id: '2026-02-12', label: 'Jeudi 12 fév.',  sub: '2026' },
-  { id: '2026-03-12', label: 'Jeudi 12 mars',  sub: '2026' },
-  { id: '2026-04-09', label: 'Jeudi 9 avr.',   sub: '2026' },
-  { id: '2026-05-14', label: 'Jeudi 14 mai',   sub: '2026' },
-  { id: '2026-06-11', label: 'Jeudi 11 juin',  sub: '2026' },
+  { id: '2026-09-10', label: 'Jeudi 10 sept.', sub: '2026' },
+  { id: '2026-10-08', label: 'Jeudi 8 oct.',   sub: '2026' },
+  { id: '2026-11-12', label: 'Jeudi 12 nov.',  sub: '2026' },
+  { id: '2026-12-10', label: 'Jeudi 10 déc.',  sub: '2026' },
+  { id: '2027-01-14', label: 'Jeudi 14 jan.',  sub: '2027' },
+  { id: '2027-02-11', label: 'Jeudi 11 fév.',  sub: '2027' },
+  { id: '2027-03-11', label: 'Jeudi 11 mars',  sub: '2027' },
+  { id: '2027-04-08', label: 'Jeudi 8 avr.',   sub: '2027' },
+  { id: '2027-05-13', label: 'Jeudi 13 mai',   sub: '2027' },
+  { id: '2027-06-10', label: 'Jeudi 10 juin',  sub: '2027' },
 ]
 
 export const MAX_PER_DATE = 9
