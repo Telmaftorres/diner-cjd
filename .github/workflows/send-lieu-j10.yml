@@ -1,0 +1,17 @@
+name: Envoi lieu J-10
+
+on:
+  schedule:
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Envoyer le lieu aux inscrits
+        run: |
+          DATE_ID=$(date -u -d '+10 days' '+%Y-%m-%d' 2>/dev/null || date -u -v+10d '+%Y-%m-%d')
+          curl -X POST ${{ secrets.APP_URL }}/api/admin/send-lieu \
+            -H "Content-Type: application/json" \
+            -d "{\"dateId\": \"$DATE_ID\", \"adminSecret\": \"${{ secrets.ADMIN_SECRET }}\"}"

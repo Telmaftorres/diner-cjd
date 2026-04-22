@@ -1,0 +1,16 @@
+name: Reminder J-14
+
+on:
+  schedule:
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Envoyer email à Baptiste
+        run: |
+          curl -X POST ${{ secrets.APP_URL }}/api/admin/send-reminder \
+            -H "Content-Type: application/json" \
+            -d '{"adminSecret": "${{ secrets.ADMIN_SECRET }}"}'

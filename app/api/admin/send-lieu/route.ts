@@ -13,20 +13,20 @@ const transporter = nodemailer.createTransport({
   },
 })
 
-async function sendEmail(to: string, subject: string, html: string) {
-  await transporter.sendMail({
-    from: '"Dîner CJD" <baptiste@kontfeel.fr>',
-    to,
-    subject,
-    html,
-  })
-}
-
 export async function POST(req: NextRequest) {
-  const { dateId, lieu, horaire, adminSecret } = await req.json()
+  const { dateId, adminSecret } = await req.json()
 
   if (adminSecret !== process.env.ADMIN_SECRET)
     return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+
+  const { data: info } = await supabaseAdmin
+    .from('diner_infos')
+    .select('lieu, horaire, rempli')
+    .eq('date_id', dateId)
+    .single()
+
+  if (!info || !info.rempli || !info.lieu || !info.horaire)
+    return NextResponse.json({ error: 'Lieu non renseigné' }, { status: 404 })
 
   const { data: inscrits } = await supabaseAdmin
     .from('inscriptions')
@@ -42,10 +42,15 @@ export async function POST(req: NextRequest) {
     const { html, subject } = emailLieu({
       prenom: inscrit.prenom,
       dateLabel: inscrit.date_label,
-      lieu,
-      horaire,
+      lieu: info.lieu,
+      horaire: info.horaire,
     })
-    await sendEmail(inscrit.email, subject, html)
+    await transporter.sendMail({
+      from: '"Dîner CJD" <baptiste@kontfeel.fr>',
+      to: inscrit.email,
+      subject,
+      html,
+    })
     sent++
   }
 
