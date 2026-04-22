@@ -3,6 +3,8 @@ import { supabaseAdmin } from '@/lib/supabase'
 import nodemailer from 'nodemailer'
 import { DATES } from '@/lib/dates'
 
+const ADMIN_EMAIL = 'baptiste@kontfeel.fr'
+
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: Number(process.env.SMTP_PORT),
@@ -43,7 +45,7 @@ export async function POST(req: NextRequest) {
 
   await transporter.sendMail({
     from: '"Dîner CJD" <baptiste@kontfeel.fr>',
-    to: process.env.ADMIN_EMAIL!,
+    to: ADMIN_EMAIL,
     subject: `Dîner du ${date.label} ${date.sub} — renseignez le lieu`,
     html: `<!DOCTYPE html>
 <html lang="fr">
