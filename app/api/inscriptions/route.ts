@@ -1,20 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
-import * as Brevo from '@getbrevo/brevo'
+import nodemailer from 'nodemailer'
 import { emailConfirmation, emailAdminNouvelleInscription } from '@/lib/emails'
 import { DATES, MAX_PER_DATE } from '@/lib/dates'
 import crypto from 'crypto'
 
-const apiInstance = new Brevo.TransactionalEmailsApi()
-apiInstance.setApiKey(Brevo.TransactionalEmailsApiApiKeys.apiKey, process.env.BREVO_API_KEY!)
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: Number(process.env.SMTP_PORT),
+  secure: false,
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+})
 
 async function sendEmail(to: string, subject: string, html: string) {
-  const email = new Brevo.SendSmtpEmail()
-  email.subject = subject
-  email.htmlContent = html
-  email.sender = { name: 'Dîner CJD', email: 'telma@kontfeel.fr' }
-  email.to = [{ email: to }]
-  await apiInstance.sendTransacEmail(email)
+  await transporter.sendMail({
+    from: '"Dîner CJD" <baptiste@kontfeel.fr>',
+    to,
+    subject,
+    html,
+  })
 }
 
 export async function POST(req: NextRequest) {
