@@ -79,7 +79,11 @@ export async function POST(req: NextRequest) {
   const { html, subject } = emailConfirmation({ prenom, nom, dateLabel, cancelToken, baseUrl })
   await sendEmail(email, subject, html)
 
-  const admin = emailAdminNouvelleInscription({ prenom, nom, email, tel, dateLabel, totalInscrits: newCount ?? 1 })
+  const admin = emailAdminNouvelleInscription({
+    prenom, nom, email, tel, dateLabel,
+    totalInscrits: newCount ?? 1,
+    adminUrl: `${baseUrl}/admin`,
+  })
   await sendEmail(ADMIN_EMAIL, admin.subject, admin.html)
 
   return NextResponse.json({ ok: true })
