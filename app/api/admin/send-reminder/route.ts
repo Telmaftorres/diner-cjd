@@ -23,6 +23,9 @@ export async function POST(req: NextRequest) {
   const target = new Date(today)
   target.setDate(today.getDate() + 0) // test avec aujourd'hui
   const targetId = target.toISOString().split('T')[0]
+  console.log('targetId:', targetId)
+
+  return NextResponse.json({ debug: targetId })
 
   const date = DATES.find(d => d.id === targetId)
   if (!date) return NextResponse.json({ ok: false, message: 'Pas de dîner dans 14 jours' })
