@@ -1,4 +1,5 @@
 export const DATES = [
+  { id: '2026-05-06', label: 'Mercredi 6 mai', sub: '2026' },
   { id: '2026-09-10', label: 'Jeudi 10 sept.', sub: '2026' },
   { id: '2026-10-08', label: 'Jeudi 8 oct.',   sub: '2026' },
   { id: '2026-11-12', label: 'Jeudi 12 nov.',  sub: '2026' },
