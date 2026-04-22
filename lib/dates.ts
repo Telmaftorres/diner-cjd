@@ -7,7 +7,6 @@ export const DATES = [
   { id: '2026-02-12', label: 'Jeudi 12 fév.',  sub: '2026' },
   { id: '2026-03-12', label: 'Jeudi 12 mars',  sub: '2026' },
   { id: '2026-04-09', label: 'Jeudi 9 avr.',   sub: '2026' },
-  { id: '2026-04-22', label: 'Mercredi 22 avr.', sub: '2026' },
   { id: '2026-05-14', label: 'Jeudi 14 mai',   sub: '2026' },
   { id: '2026-06-11', label: 'Jeudi 11 juin',  sub: '2026' },
 ]
