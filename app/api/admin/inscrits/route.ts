@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
   let dinerInfos: any[] = []
   const di = await supabaseAdmin
     .from('diner_infos')
-    .select('date_id, lieu, horaire, rempli, updated_at')
+    .select('date_id, lieu, horaire, rempli')
   if (!di.error && di.data) dinerInfos = di.data
 
   return NextResponse.json({ inscrits: data, dinerInfos })

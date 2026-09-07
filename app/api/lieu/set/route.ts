@@ -31,7 +31,6 @@ export async function POST(req: NextRequest) {
       lieu: lieu.trim(),
       horaire: (horaire || '19h').trim(),
       rempli: true,
-      updated_at: new Date().toISOString(),
     })
     .eq('admin_token', token)
     .select('date_id')

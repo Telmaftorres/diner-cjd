@@ -18,7 +18,6 @@ type DinerInfo = {
   lieu: string | null
   horaire: string | null
   rempli: boolean
-  updated_at?: string
 }
 
 const S = {

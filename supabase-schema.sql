@@ -1,3 +1,5 @@
+-- Schéma de référence. La base de prod existe déjà ; voir les migrations en bas.
+
 create table inscriptions (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz default now(),
@@ -19,27 +21,18 @@ alter table inscriptions enable row level security;
 -- Lieu / horaire de chaque dîner. Une ligne par date_id, créée à la demande.
 -- admin_token : lien tokenisé envoyé à Baptiste (page /lieu/<token>).
 create table diner_infos (
-  date_id text primary key,
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz default now(),
+  date_id text not null unique,
   lieu text,
-  horaire text not null default '19h',
+  horaire text,
   admin_token uuid not null default gen_random_uuid(),
-  rempli boolean not null default false,
-  updated_at timestamptz default now()
+  rempli boolean not null default false
 );
 
 alter table diner_infos enable row level security;
 
 -- ────────────────────────────────────────────────────────────────
--- Migrations à appliquer sur une base existante (SQL Editor Supabase) :
---
--- alter table inscriptions add column if not exists is_test boolean not null default false;
---
--- create table if not exists diner_infos (
---   date_id text primary key,
---   lieu text,
---   horaire text not null default '19h',
---   admin_token uuid not null default gen_random_uuid(),
---   rempli boolean not null default false,
---   updated_at timestamptz default now()
--- );
--- alter table diner_infos enable row level security;
+-- Migration déjà appliquée sur la base de prod (2026-09) :
+--   alter table inscriptions add column if not exists is_test boolean not null default false;
+-- La table diner_infos existait déjà (pré-remplie 2026-04).

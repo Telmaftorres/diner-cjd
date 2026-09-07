@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
   if (info) {
     await supabaseAdmin
       .from('diner_infos')
-      .update({ lieu: lieuFinal, horaire: horaireFinal, rempli: true, updated_at: new Date().toISOString() })
+      .update({ lieu: lieuFinal, horaire: horaireFinal, rempli: true })
       .eq('date_id', dateId)
   }
 
