@@ -127,7 +127,7 @@ export default function Form() {
       </div>
 
       <div style={S.intro}>
-        À votre table : <strong>7 membres de la section</strong> (actifs, nouveaux, aînés) et un <strong>invité mystère</strong>.<br />
+        À votre table : <strong>7 membres de la section</strong> et un <strong>invité mystère</strong>.<br />
         L'objectif : raconter son CJD et se rencontrer.<br />
         Le lieu exact sera dévoilé au dernier moment &amp; vous découvrirez les convives à votre arrivée !
       </div>
