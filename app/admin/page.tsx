@@ -118,8 +118,8 @@ export default function AdminPage() {
       <div style={S.wrap}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap' as const, gap: '12px' }}>
           <div>
-            <h1 style={{ fontSize: '20px', fontWeight: 600, color: '#111', margin: '0 0 4px' }}>Pré-inscrits — Dîner confidentiel</h1>
-            <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>{actifs.length} pré-inscrits actifs · {annules.length} annulations</p>
+            <h1 style={{ fontSize: '20px', fontWeight: 600, color: '#111', margin: '0 0 4px' }}>Inscrits — Dîner confidentiel</h1>
+            <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>{actifs.length} inscrits actifs · {annules.length} annulations</p>
           </div>
           <button style={S.exportBtn} onClick={exportExcel}>Télécharger CSV</button>
         </div>
@@ -152,7 +152,7 @@ export default function AdminPage() {
           </div>
         ))}
 
-        {actifs.length === 0 && <p style={{ color: '#aaa', fontSize: '14px', textAlign: 'center', padding: '2rem 0' }}>Aucune pré-inscription pour le moment.</p>}
+        {actifs.length === 0 && <p style={{ color: '#aaa', fontSize: '14px', textAlign: 'center', padding: '2rem 0' }}>Aucune inscription pour le moment.</p>}
 
         {annules.length > 0 && (
           <div style={{ background: '#fff', borderRadius: '12px', border: '0.5px solid #e8e8e4', overflow: 'hidden', marginBottom: '1rem' }}>

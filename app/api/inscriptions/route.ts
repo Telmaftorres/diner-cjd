@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import nodemailer from 'nodemailer'
-import { emailAdminNouvelleInscription } from '@/lib/emails'
+import { emailConfirmation, emailAdminNouvelleInscription } from '@/lib/emails'
 import { DATES, MAX_PER_DATE } from '@/lib/dates'
 import crypto from 'crypto'
 
@@ -95,8 +95,15 @@ export async function POST(req: NextRequest) {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!
   const tag = isTest ? '[TEST] ' : ''
 
-  // Pas d'email au participant : il voit l'écran de confirmation, et c'est
-  // l'organisation qui revient vers lui selon les places. On notifie juste l'admin.
+  // Email de confirmation au participant (sa place est réservée).
+  try {
+    const { html, subject } = emailConfirmation({ prenom, dateLabel, cancelToken, baseUrl })
+    await sendEmail(email, tag + subject, html)
+  } catch (e: any) {
+    console.error('Erreur email participant:', e.message)
+  }
+
+  // Notification à l'admin.
   try {
     const admin = emailAdminNouvelleInscription({
       prenom, nom, email, tel, dateLabel,
