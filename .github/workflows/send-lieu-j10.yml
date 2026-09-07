@@ -1,22 +1,18 @@
-name: Envoi du lieu aux inscrits
+name: Envoi du lieu aux inscrits (J-10)
 
-# Déclenchement manuel uniquement : le lieu est dévoilé au dernier moment et
-# change d'un dîner à l'autre. Depuis l'onglet Actions de GitHub, lancer ce
-# workflow en renseignant la date du dîner, le lieu et l'horaire.
+# Chaque jour : si un dîner a lieu dans exactement 10 jours, l'email « le lieu
+# se dévoile » part aux inscrits, avec le lieu renseigné dans diner_infos.
+# Si le lieu n'est pas renseigné, rien ne part (l'appel répond juste "Lieu non
+# renseigné"). On peut aussi déclencher l'envoi à la main depuis /admin.
 
 on:
+  schedule:
+    - cron: '30 8 * * *'
   workflow_dispatch:
     inputs:
       dateId:
-        description: "Date du dîner (format AAAA-MM-JJ, ex. 2026-10-01)"
-        required: true
-      lieu:
-        description: "Lieu exact (adresse complète)"
-        required: true
-      horaire:
-        description: "Horaire"
+        description: "Date du dîner (AAAA-MM-JJ) — laisser vide pour J-10 automatique"
         required: false
-        default: "19h"
 
 jobs:
   send:
@@ -24,11 +20,11 @@ jobs:
     steps:
       - name: Envoyer le lieu aux inscrits
         run: |
-          curl -fsS -X POST ${{ secrets.APP_URL }}/api/admin/send-lieu \
+          DATE_ID="${{ github.event.inputs.dateId }}"
+          if [ -z "$DATE_ID" ]; then
+            DATE_ID=$(date -u -d '+10 days' '+%Y-%m-%d' 2>/dev/null || date -u -v+10d '+%Y-%m-%d')
+          fi
+          echo "Date ciblée : $DATE_ID"
+          curl -sS -X POST ${{ secrets.APP_URL }}/api/admin/send-lieu \
             -H "Content-Type: application/json" \
-            -d "$(jq -n \
-              --arg dateId '${{ github.event.inputs.dateId }}' \
-              --arg lieu '${{ github.event.inputs.lieu }}' \
-              --arg horaire '${{ github.event.inputs.horaire }}' \
-              --arg adminSecret '${{ secrets.ADMIN_SECRET }}' \
-              '{dateId: $dateId, lieu: $lieu, horaire: $horaire, adminSecret: $adminSecret}')"
+            -d "$(jq -n --arg d "$DATE_ID" --arg s '${{ secrets.ADMIN_SECRET }}' '{dateId: $d, adminSecret: $s}')"

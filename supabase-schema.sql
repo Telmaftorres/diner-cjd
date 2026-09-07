@@ -16,5 +16,30 @@ create index on inscriptions(date_id, annule);
 
 alter table inscriptions enable row level security;
 
--- Migration à appliquer sur une base existante (SQL Editor Supabase) :
+-- Lieu / horaire de chaque dîner. Une ligne par date_id, créée à la demande.
+-- admin_token : lien tokenisé envoyé à Baptiste (page /lieu/<token>).
+create table diner_infos (
+  date_id text primary key,
+  lieu text,
+  horaire text not null default '19h',
+  admin_token uuid not null default gen_random_uuid(),
+  rempli boolean not null default false,
+  updated_at timestamptz default now()
+);
+
+alter table diner_infos enable row level security;
+
+-- ────────────────────────────────────────────────────────────────
+-- Migrations à appliquer sur une base existante (SQL Editor Supabase) :
+--
 -- alter table inscriptions add column if not exists is_test boolean not null default false;
+--
+-- create table if not exists diner_infos (
+--   date_id text primary key,
+--   lieu text,
+--   horaire text not null default '19h',
+--   admin_token uuid not null default gen_random_uuid(),
+--   rempli boolean not null default false,
+--   updated_at timestamptz default now()
+-- );
+-- alter table diner_infos enable row level security;

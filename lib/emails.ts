@@ -150,3 +150,35 @@ export function emailAdminNouvelleInscription({
 </html>`,
   }
 }
+
+export function emailRappelLieu({
+  dateLabel,
+  formUrl,
+  nbInscrits,
+}: {
+  dateLabel: string
+  formUrl: string
+  nbInscrits: number
+}) {
+  return {
+    subject: `Dîner du ${dateLabel} — renseigne le lieu (dans 2 semaines)`,
+    html: `<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="UTF-8"></head>
+<body style="font-family:Arial,sans-serif;padding:32px;background:#f5f5f5;">
+<table width="480" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:12px;padding:32px;border:0.5px solid #e8e8e4;">
+<tr><td style="text-align:center;">
+<div style="margin:0 0 20px;"><img src="${LOGO_URL}" width="140" alt="CJD Rouen" style="display:inline-block;border:0;height:auto;"></div>
+<h1 style="font-size:18px;font-weight:600;color:#111;margin:0 0 8px;">Dîner du ${dateLabel}</h1>
+<p style="color:#888;font-size:14px;line-height:1.7;margin:0 0 24px;">
+C'est dans 2 semaines${nbInscrits ? `, avec ${nbInscrits} inscrit${nbInscrits > 1 ? 's' : ''}` : ''}.<br>
+Merci de renseigner le lieu et l'horaire pour que les inscrits soient prévenus à temps.
+</p>
+<a href="${formUrl}" style="display:inline-block;padding:14px 32px;background:#111;color:#fff;text-decoration:none;border-radius:10px;font-size:15px;font-weight:600;">Renseigner le lieu</a>
+<p style="color:#bbb;font-size:11px;line-height:1.6;margin:20px 0 0;">Ce lien t'est réservé, ne le partage pas.</p>
+</td></tr>
+</table>
+</body>
+</html>`,
+  }
+}

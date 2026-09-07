@@ -22,5 +22,12 @@ export async function POST(req: NextRequest) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
-  return NextResponse.json({ inscrits: data })
+  // Infos lieu par date (peut ne pas exister si la migration n'est pas faite).
+  let dinerInfos: any[] = []
+  const di = await supabaseAdmin
+    .from('diner_infos')
+    .select('date_id, lieu, horaire, rempli, updated_at')
+  if (!di.error && di.data) dinerInfos = di.data
+
+  return NextResponse.json({ inscrits: data, dinerInfos })
 }

@@ -1,0 +1,19 @@
+name: Rappel lieu à Baptiste (J-14)
+
+# Chaque jour : si un dîner a lieu dans exactement 14 jours et que le lieu
+# n'est pas renseigné, un email part à Baptiste avec le lien de saisie.
+
+on:
+  schedule:
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Rappel lieu J-14
+        run: |
+          curl -sS -X POST ${{ secrets.APP_URL }}/api/admin/send-reminder \
+            -H "Content-Type: application/json" \
+            -d "$(jq -n --arg s '${{ secrets.ADMIN_SECRET }}' '{adminSecret: $s}')"

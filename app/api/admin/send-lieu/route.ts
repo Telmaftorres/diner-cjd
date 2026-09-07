@@ -3,6 +3,7 @@ import { supabaseAdmin } from '@/lib/supabase'
 import nodemailer from 'nodemailer'
 import { emailLieu } from '@/lib/emails'
 import { LIEU, HORAIRE } from '@/lib/config'
+import { getOrCreateDinerInfo } from '@/lib/dinerInfos'
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -14,25 +15,34 @@ const transporter = nodemailer.createTransport({
   },
 })
 
+// Envoie l'email « le lieu se dévoile » à tous les inscrits d'une date.
+// - Déclenché manuellement depuis /admin (lieu/horaire passés dans la requête),
+// - ou automatiquement à J-10 par GitHub Actions (lieu/horaire lus dans diner_infos).
 export async function POST(req: NextRequest) {
   const { dateId, adminSecret, lieu, horaire } = await req.json()
 
   if (adminSecret !== process.env.ADMIN_SECRET)
     return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
 
-  // Le lieu peut changer d'un dîner à l'autre : on prend celui fourni dans la
-  // requête, sinon la valeur par défaut de lib/config.ts.
-  const lieuFinal = lieu || LIEU
-  const horaireFinal = horaire || HORAIRE
+  if (!dateId) return NextResponse.json({ error: 'Date manquante' }, { status: 400 })
+
+  const info = await getOrCreateDinerInfo(dateId)
+
+  const lieuFinal = (lieu || info?.lieu || LIEU || '').trim()
+  const horaireFinal = (horaire || info?.horaire || HORAIRE || '19h').trim()
+
+  if (!lieuFinal || lieuFinal === 'À communiquer')
+    return NextResponse.json({ ok: false, error: 'Lieu non renseigné' }, { status: 400 })
 
   const { data: inscrits } = await supabaseAdmin
     .from('inscriptions')
     .select('prenom, email, date_label')
     .eq('date_id', dateId)
     .eq('annule', false)
+    .eq('is_test', false)
 
   if (!inscrits || inscrits.length === 0)
-    return NextResponse.json({ error: 'Aucun inscrit' }, { status: 404 })
+    return NextResponse.json({ ok: false, error: 'Aucun inscrit' }, { status: 404 })
 
   let sent = 0
   for (const inscrit of inscrits) {
@@ -49,6 +59,14 @@ export async function POST(req: NextRequest) {
       html,
     })
     sent++
+  }
+
+  // Mémorise ce qui a été envoyé (utile si l'envoi vient du bouton admin).
+  if (info) {
+    await supabaseAdmin
+      .from('diner_infos')
+      .update({ lieu: lieuFinal, horaire: horaireFinal, rempli: true, updated_at: new Date().toISOString() })
+      .eq('date_id', dateId)
   }
 
   return NextResponse.json({ ok: true, sent })
