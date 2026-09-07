@@ -36,6 +36,7 @@ const S = {
 export default function Form() {
   const params = useSearchParams()
   const cancelStatus = params.get('cancel')
+  const testMode = params.get('test') === '1'
 
   const [counts, setCounts] = useState<Record<string, number>>({})
   const [selected, setSelected] = useState<string | null>(null)
@@ -67,7 +68,7 @@ export default function Form() {
     const res = await fetch('/api/inscriptions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...fields, dateId: selected }),
+      body: JSON.stringify({ ...fields, dateId: selected, test: testMode }),
     })
     if (res.ok) {
       setStatus('success')
@@ -93,17 +94,34 @@ export default function Form() {
   if (status === 'success') return (
     <div style={{ ...S.wrap, textAlign: 'center', padding: '3rem 1.5rem', background: '#fff', border: '0.5px solid #e8e8e4', borderRadius: '16px' }}>
       <div style={S.logo}>CJD Rouen</div>
-      <h2 style={{ color: '#111', fontSize: '20px', fontWeight: 600, margin: '1.25rem 0 0.75rem' }}>Merci, {fields.prenom} !</h2>
-      <p style={{ color: '#888', fontSize: '15px', lineHeight: 1.8 }}>
-        Votre pré-inscription est bien enregistrée.<br />
-        Une confirmation vous sera envoyée par email selon les places disponibles.<br /><br />
-        Le lieu ? Il vous parviendra au dernier moment.
-      </p>
+      {testMode ? (
+        <>
+          <h2 style={{ color: '#111', fontSize: '20px', fontWeight: 600, margin: '1.25rem 0 0.75rem' }}>🧪 Test effectué</h2>
+          <p style={{ color: '#888', fontSize: '15px', lineHeight: 1.8 }}>
+            Les emails de test viennent d'être envoyés à <strong>{fields.email}</strong> et à l'admin.<br />
+            Cette inscription est marquée « test » et n'occupe aucune place.
+          </p>
+        </>
+      ) : (
+        <>
+          <h2 style={{ color: '#111', fontSize: '20px', fontWeight: 600, margin: '1.25rem 0 0.75rem' }}>Merci, {fields.prenom} !</h2>
+          <p style={{ color: '#888', fontSize: '15px', lineHeight: 1.8 }}>
+            Votre pré-inscription est bien enregistrée.<br />
+            Une confirmation vous sera envoyée par email selon les places disponibles.<br /><br />
+            Le lieu ? Il vous parviendra au dernier moment.
+          </p>
+        </>
+      )}
     </div>
   )
 
   return (
     <div style={S.wrap}>
+      {testMode && (
+        <div style={{ background: '#fff8e1', border: '0.5px solid #f0d9a8', borderRadius: '12px', padding: '12px 16px', marginBottom: '1rem', fontSize: '13px', color: '#a9821f', textAlign: 'center', lineHeight: 1.6 }}>
+          🧪 <strong>Mode test</strong> — aucune vraie pré-inscription ne sera créée,<br />mais les emails sont réellement envoyés.
+        </div>
+      )}
       <div style={S.header}>
         <div style={S.logo}>CJD Rouen</div>
         <h1 style={S.h1}>Dîner confidentiel</h1>
@@ -163,7 +181,7 @@ export default function Form() {
       <p style={S.hint}>Tous les dîners à 19h, à 10 min max autour de Rouen.</p>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
         {DATES.map(d => {
-          const full = (counts[d.id] ?? 0) >= MAX_PER_DATE
+          const full = (counts[d.id] ?? 0) >= MAX_PER_DATE && !testMode
           const sel = selected === d.id
           return (
             <button

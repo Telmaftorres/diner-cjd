@@ -13,6 +13,7 @@ export async function GET() {
       .select('*', { count: 'exact', head: true })
       .eq('date_id', date.id)
       .eq('annule', false)
+      .eq('is_test', false)
     counts[date.id] = count ?? 0
   }
   return NextResponse.json(counts)

@@ -8,9 +8,13 @@ create table inscriptions (
   date_id text not null,
   date_label text not null,
   cancel_token uuid not null unique,
-  annule boolean default false
+  annule boolean default false,
+  is_test boolean not null default false
 );
 
 create index on inscriptions(date_id, annule);
 
 alter table inscriptions enable row level security;
+
+-- Migration à appliquer sur une base existante (SQL Editor Supabase) :
+-- alter table inscriptions add column if not exists is_test boolean not null default false;
