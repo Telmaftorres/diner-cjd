@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import nodemailer from 'nodemailer'
 import { emailLieu } from '@/lib/emails'
+import { LIEU, HORAIRE } from '@/lib/config'
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -14,19 +15,15 @@ const transporter = nodemailer.createTransport({
 })
 
 export async function POST(req: NextRequest) {
-  const { dateId, adminSecret } = await req.json()
+  const { dateId, adminSecret, lieu, horaire } = await req.json()
 
   if (adminSecret !== process.env.ADMIN_SECRET)
     return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
 
-  const { data: info } = await supabaseAdmin
-    .from('diner_infos')
-    .select('lieu, horaire, rempli')
-    .eq('date_id', dateId)
-    .single()
-
-  if (!info || !info.rempli || !info.lieu || !info.horaire)
-    return NextResponse.json({ error: 'Lieu non renseigné' }, { status: 404 })
+  // Le lieu peut changer d'un dîner à l'autre : on prend celui fourni dans la
+  // requête, sinon la valeur par défaut de lib/config.ts.
+  const lieuFinal = lieu || LIEU
+  const horaireFinal = horaire || HORAIRE
 
   const { data: inscrits } = await supabaseAdmin
     .from('inscriptions')
@@ -42,11 +39,11 @@ export async function POST(req: NextRequest) {
     const { html, subject } = emailLieu({
       prenom: inscrit.prenom,
       dateLabel: inscrit.date_label,
-      lieu: info.lieu,
-      horaire: info.horaire,
+      lieu: lieuFinal,
+      horaire: horaireFinal,
     })
     await transporter.sendMail({
-      from: '"Dîner CJD" <baptiste@kontfeel.fr>',
+      from: '"CJD Rouen — Dîner confidentiel" <baptiste@kontfeel.fr>',
       to: inscrit.email,
       subject,
       html,

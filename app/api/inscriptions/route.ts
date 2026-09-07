@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import nodemailer from 'nodemailer'
-import { emailConfirmation, emailAdminNouvelleInscription } from '@/lib/emails'
+import { emailPreInscription, emailAdminNouvelleInscription } from '@/lib/emails'
 import { DATES, MAX_PER_DATE } from '@/lib/dates'
 import crypto from 'crypto'
 
@@ -17,7 +17,7 @@ const transporter = nodemailer.createTransport({
 
 async function sendEmail(to: string, subject: string, html: string) {
   await transporter.sendMail({
-    from: '"Dîner CJD" <baptiste@kontfeel.fr>',
+    from: '"CJD Rouen — Dîner confidentiel" <baptiste@kontfeel.fr>',
     to,
     subject,
     html,
@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!
   const dateLabel = date.label + ' ' + date.sub
 
-  const { html, subject } = emailConfirmation({ prenom, nom, dateLabel, cancelToken, baseUrl })
+  const { html, subject } = emailPreInscription({ prenom, nom, dateLabel, cancelToken, baseUrl })
   await sendEmail(email, subject, html)
 
   try {

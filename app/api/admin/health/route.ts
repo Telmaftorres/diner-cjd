@@ -20,16 +20,6 @@ export async function POST(req: NextRequest) {
     results.supabase_inscriptions = { ok: false, error: e.message }
   }
 
-  // Test Supabase - diner_infos
-  try {
-    const { data, error } = await supabaseAdmin
-      .from('diner_infos')
-      .select('date_id, rempli')
-    results.supabase_diner_infos = error ? { ok: false, error: error.message } : { ok: true, count: data?.length }
-  } catch (e: any) {
-    results.supabase_diner_infos = { ok: false, error: e.message }
-  }
-
   // Test SMTP
   try {
     const transporter = nodemailer.createTransport({
@@ -60,6 +50,6 @@ export async function POST(req: NextRequest) {
     base_url: !!process.env.NEXT_PUBLIC_BASE_URL,
   }
 
-  const allOk = results.supabase_inscriptions.ok && results.supabase_diner_infos.ok && results.smtp.ok
+  const allOk = results.supabase_inscriptions.ok && results.smtp.ok
   return NextResponse.json({ ok: allOk, results })
 }

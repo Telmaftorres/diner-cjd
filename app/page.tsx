@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 import Form from './Form'
 
 export const metadata = {
-  title: 'Dîner surprise — CJD',
+  title: 'Dîner confidentiel — CJD Rouen',
   viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
 }
 

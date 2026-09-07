@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { DATES } from '@/lib/dates'
 
+// Toujours recalculer : sans ça, Next.js fige les compteurs au build.
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   const counts: Record<string, number> = {}
   for (const date of DATES) {

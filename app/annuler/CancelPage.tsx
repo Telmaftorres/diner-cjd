@@ -30,7 +30,7 @@ export default function CancelPage() {
   return (
     <div style={style.page}>
       <div style={style.card}>
-        <p style={{ fontSize: '36px', marginBottom: '1.25rem' }}>🌹</p>
+        <div style={{ display: 'inline-block', fontSize: '13px', fontWeight: 700, letterSpacing: '.16em', textTransform: 'uppercase', color: '#1D9E75', border: '1px solid #1D9E75', borderRadius: '8px', padding: '7px 14px', marginBottom: '1.5rem' }}>CJD Rouen</div>
         {status === 'loading' && <p style={{ color: '#888' }}>Traitement en cours…</p>}
         {status === 'ok' && <>
           <h1 style={{ color: '#111', fontSize: '18px', fontWeight: 600, marginBottom: '0.75rem' }}>Absence enregistrée</h1>

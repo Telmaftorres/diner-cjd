@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { MAX_PER_DATE } from '@/lib/dates'
 
 type Inscrit = {
   prenom: string
@@ -66,9 +67,9 @@ export default function AdminPage() {
     <div style={S.page}>
       <div style={{ maxWidth: '400px', margin: '0 auto' }}>
         <div style={S.header}>
-          <p style={{ fontSize: '36px', margin: 0 }}>🌹</p>
+          <div style={{ display: 'inline-block', fontSize: '13px', fontWeight: 700, letterSpacing: '.16em', textTransform: 'uppercase', color: '#1D9E75', border: '1px solid #1D9E75', borderRadius: '8px', padding: '7px 14px' }}>CJD Rouen</div>
           <h1 style={S.h1}>Espace admin</h1>
-          <p style={{ color: '#888', fontSize: '14px', margin: 0 }}>Dîner surprise CJD</p>
+          <p style={{ color: '#888', fontSize: '14px', margin: 0 }}>Dîner confidentiel CJD Rouen</p>
         </div>
         <input
           style={S.input}
@@ -100,8 +101,8 @@ export default function AdminPage() {
       <div style={S.wrap}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap' as const, gap: '12px' }}>
           <div>
-            <h1 style={{ fontSize: '20px', fontWeight: 600, color: '#111', margin: '0 0 4px' }}>🌹 Inscrits — Dîner CJD</h1>
-            <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>{actifs.length} inscrits actifs · {annules.length} annulations</p>
+            <h1 style={{ fontSize: '20px', fontWeight: 600, color: '#111', margin: '0 0 4px' }}>Pré-inscrits — Dîner confidentiel</h1>
+            <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>{actifs.length} pré-inscrits actifs · {annules.length} annulations</p>
           </div>
           <button style={S.exportBtn} onClick={exportExcel}>Télécharger CSV</button>
         </div>
@@ -110,7 +111,7 @@ export default function AdminPage() {
           <div key={date} style={{ background: '#fff', borderRadius: '12px', border: '0.5px solid #e8e8e4', marginBottom: '1rem', overflow: 'hidden' }}>
             <div style={{ padding: '14px 20px', borderBottom: '0.5px solid #e8e8e4', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span style={{ fontWeight: 600, fontSize: '15px', color: '#111' }}>{date}</span>
-              <span style={{ fontSize: '13px', color: liste.length >= 9 ? '#E24B4A' : '#1D9E75', fontWeight: 600 }}>{liste.length} / 9</span>
+              <span style={{ fontSize: '13px', color: liste.length >= MAX_PER_DATE ? '#E24B4A' : '#1D9E75', fontWeight: 600 }}>{liste.length} / {MAX_PER_DATE}</span>
             </div>
             <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: '13px' }}>
               <thead>

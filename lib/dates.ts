@@ -1,15 +1,10 @@
 export const DATES = [
-  { id: '2026-05-06', label: 'Mercredi 6 mai', sub: '2026' },
-  { id: '2026-09-10', label: 'Jeudi 10 sept.', sub: '2026' },
-  { id: '2026-10-08', label: 'Jeudi 8 oct.',   sub: '2026' },
-  { id: '2026-11-12', label: 'Jeudi 12 nov.',  sub: '2026' },
-  { id: '2026-12-10', label: 'Jeudi 10 déc.',  sub: '2026' },
-  { id: '2027-01-14', label: 'Jeudi 14 jan.',  sub: '2027' },
-  { id: '2027-02-11', label: 'Jeudi 11 fév.',  sub: '2027' },
-  { id: '2027-03-11', label: 'Jeudi 11 mars',  sub: '2027' },
-  { id: '2027-04-08', label: 'Jeudi 8 avr.',   sub: '2027' },
-  { id: '2027-05-13', label: 'Jeudi 13 mai',   sub: '2027' },
-  { id: '2027-06-10', label: 'Jeudi 10 juin',  sub: '2027' },
+  { id: '2026-10-01', label: 'Jeudi 1er octobre 2026', sub: '19h' },
+  { id: '2026-11-05', label: 'Jeudi 5 novembre 2026',  sub: '19h' },
+  { id: '2026-12-03', label: 'Jeudi 3 décembre 2026',  sub: '19h' },
+  { id: '2027-01-07', label: 'Jeudi 7 janvier 2027',   sub: '19h' },
 ]
 
-export const MAX_PER_DATE = 9
+// 7 membres de la section par table. L'invité mystère est ajouté par
+// l'organisation, hors formulaire.
+export const MAX_PER_DATE = 7

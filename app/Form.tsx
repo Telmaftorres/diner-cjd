@@ -6,9 +6,14 @@ import { DATES, MAX_PER_DATE } from '@/lib/dates'
 const S = {
   wrap: { maxWidth: '520px', width: '100%', fontFamily: '-apple-system, Arial, sans-serif' } as React.CSSProperties,
   header: { textAlign: 'center' as const, padding: '2.5rem 1.5rem', background: '#fff', borderRadius: '16px', marginBottom: '1.5rem', border: '0.5px solid #e8e8e4' },
-  h1: { color: '#111', fontSize: '22px', fontWeight: 600, margin: '1rem 0 0.5rem' },
+  // TODO: remplacer ce placeholder par le logo officiel du CJD Rouen
+  // (déposer l'image dans /public puis utiliser <img src="/logo-cjd-rouen.png" ... />)
+  logo: { display: 'inline-block', fontSize: '13px', fontWeight: 700, letterSpacing: '.16em', textTransform: 'uppercase' as const, color: '#1D9E75', border: '1px solid #1D9E75', borderRadius: '8px', padding: '7px 14px' } as React.CSSProperties,
+  h1: { color: '#111', fontSize: '22px', fontWeight: 600, margin: '1.25rem 0 0.5rem' },
   sub: { color: '#888', fontSize: '15px', lineHeight: 1.8, margin: 0 },
+  intro: { background: '#fff', border: '0.5px solid #e8e8e4', borderRadius: '16px', padding: '1.5rem', marginBottom: '1.5rem', color: '#555', fontSize: '14px', lineHeight: 1.9 } as React.CSSProperties,
   sectionLabel: { fontSize: '11px', fontWeight: 600, color: '#aaa', letterSpacing: '.08em', textTransform: 'uppercase' as const, margin: '2rem 0 0.75rem' },
+  hint: { fontSize: '12px', color: '#aaa', margin: '0 0 0.75rem' } as React.CSSProperties,
   label: { display: 'block', fontSize: '14px', color: '#555', marginBottom: '8px' },
   input: { width: '100%', padding: '14px 16px', border: '0.5px solid #ddd', borderRadius: '10px', background: '#fff', color: '#111', fontSize: '16px', outline: 'none', boxSizing: 'border-box' as const, WebkitAppearance: 'none' as const },
   dateBtn: (selected: boolean, disabled: boolean): React.CSSProperties => ({
@@ -70,7 +75,7 @@ export default function Form() {
       const d = await res.json()
       setErrorMsg(
         d.error === 'Complet' ? 'Cette date est complète.' :
-        d.error === 'Déjà inscrit' ? 'Vous êtes déjà inscrit pour cette date.' :
+        d.error === 'Déjà inscrit' ? 'Vous êtes déjà pré-inscrit pour cette date.' :
         'Une erreur est survenue.'
       )
       setStatus('error')
@@ -79,18 +84,19 @@ export default function Form() {
 
   if (cancelStatus === 'ok') return (
     <div style={{ ...S.wrap, textAlign: 'center', padding: '3rem 1.5rem', background: '#fff', border: '0.5px solid #e8e8e4', borderRadius: '16px' }}>
-      <p style={{ fontSize: '36px', marginBottom: '1.25rem' }}>🌹</p>
-      <h2 style={{ color: '#111', fontSize: '20px', fontWeight: 600, marginBottom: '0.75rem' }}>Absence enregistrée</h2>
+      <div style={S.logo}>CJD Rouen</div>
+      <h2 style={{ color: '#111', fontSize: '20px', fontWeight: 600, margin: '1.25rem 0 0.75rem' }}>Absence enregistrée</h2>
       <p style={{ color: '#888', fontSize: '15px', lineHeight: 1.8 }}>Votre place a été libérée. Nous espérons vous retrouver à une prochaine édition.</p>
     </div>
   )
 
   if (status === 'success') return (
     <div style={{ ...S.wrap, textAlign: 'center', padding: '3rem 1.5rem', background: '#fff', border: '0.5px solid #e8e8e4', borderRadius: '16px' }}>
-      <p style={{ fontSize: '36px', marginBottom: '1.25rem' }}>🌹</p>
-      <h2 style={{ color: '#111', fontSize: '20px', fontWeight: 600, marginBottom: '0.75rem' }}>À bientôt, {fields.prenom} !</h2>
+      <div style={S.logo}>CJD Rouen</div>
+      <h2 style={{ color: '#111', fontSize: '20px', fontWeight: 600, margin: '1.25rem 0 0.75rem' }}>Merci, {fields.prenom} !</h2>
       <p style={{ color: '#888', fontSize: '15px', lineHeight: 1.8 }}>
-        Votre inscription est confirmée.<br />Vous recevrez un email de confirmation.<br /><br />
+        Votre pré-inscription est bien enregistrée.<br />
+        Une confirmation vous sera envoyée par email selon les places disponibles.<br /><br />
         Le lieu ? Il vous parviendra au dernier moment.
       </p>
     </div>
@@ -99,9 +105,15 @@ export default function Form() {
   return (
     <div style={S.wrap}>
       <div style={S.header}>
-        <p style={{ fontSize: '36px', margin: 0 }}>🌹</p>
-        <h1 style={S.h1}>Dîner surprise</h1>
-        <p style={S.sub}>Un soir pas comme les autres.<br />Le reste… reste un secret.</p>
+        <div style={S.logo}>CJD Rouen</div>
+        <h1 style={S.h1}>Dîner confidentiel</h1>
+        <p style={S.sub}>Une soirée pour apprendre à se connaître vraiment !</p>
+      </div>
+
+      <div style={S.intro}>
+        À votre table : <strong>7 membres de la section</strong> (actifs, nouveaux, aînés) et un <strong>invité mystère</strong>.<br />
+        L'objectif : raconter son CJD et se rencontrer.<br />
+        Le lieu exact sera dévoilé au dernier moment &amp; vous découvrirez les convives à votre arrivée !
       </div>
 
       <div style={S.sectionLabel}>Vos coordonnées</div>
@@ -148,6 +160,7 @@ export default function Form() {
       </div>
 
       <div style={S.sectionLabel}>Choisissez votre date</div>
+      <p style={S.hint}>Tous les dîners à 19h, à 10 min max autour de Rouen.</p>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
         {DATES.map(d => {
           const full = (counts[d.id] ?? 0) >= MAX_PER_DATE
@@ -173,7 +186,7 @@ export default function Form() {
       </button>
 
       <p style={{ textAlign: 'center', fontSize: '12px', color: '#ccc', marginTop: '1.5rem', lineHeight: 1.6 }}>
-        La confirmation vous sera envoyée par email.<br />Le lieu vous parviendra au dernier moment.
+        Il s'agit d'une pré-inscription.<br />Une confirmation vous sera envoyée par email selon les places disponibles.
       </p>
     </div>
   )
