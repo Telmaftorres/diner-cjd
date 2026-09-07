@@ -24,7 +24,7 @@ export function emailPreInscription({
 <tr><td align="center">
 <table width="480" cellpadding="0" cellspacing="0" style="background:#111;border-radius:12px;overflow:hidden;">
 <tr><td style="padding:40px 40px 24px;text-align:center;">
-<p style="display:inline-block;font-size:12px;font-weight:bold;letter-spacing:.16em;text-transform:uppercase;color:#5DCAA5;border:1px solid #1D9E75;border-radius:8px;padding:7px 14px;margin:0 0 20px;">CJD Rouen</p>
+<p style="display:inline-block;font-size:12px;font-weight:bold;letter-spacing:.16em;text-transform:uppercase;color:#00D556;border:1px solid #00D556;border-radius:8px;padding:7px 14px;margin:0 0 20px;">CJD Rouen</p>
 <h1 style="color:#fff;font-size:20px;font-weight:500;margin:0 0 8px;">Bonsoir ${prenom},</h1>
 <p style="color:#aaa;font-size:14px;line-height:1.7;margin:0;">
 Votre pré-inscription pour le dîner du <strong style="color:#5DCAA5">${dateLabel}</strong> est bien enregistrée.
@@ -74,7 +74,7 @@ export function emailLieu({
 <tr><td align="center">
 <table width="480" cellpadding="0" cellspacing="0" style="background:#111;border-radius:12px;overflow:hidden;">
 <tr><td style="padding:40px 40px 24px;text-align:center;">
-<p style="display:inline-block;font-size:12px;font-weight:bold;letter-spacing:.16em;text-transform:uppercase;color:#5DCAA5;border:1px solid #1D9E75;border-radius:8px;padding:7px 14px;margin:0 0 20px;">CJD Rouen</p>
+<p style="display:inline-block;font-size:12px;font-weight:bold;letter-spacing:.16em;text-transform:uppercase;color:#00D556;border:1px solid #00D556;border-radius:8px;padding:7px 14px;margin:0 0 20px;">CJD Rouen</p>
 <h1 style="color:#fff;font-size:20px;font-weight:500;margin:0 0 8px;">Bonsoir ${prenom},</h1>
 <p style="color:#aaa;font-size:14px;line-height:1.7;margin:0;">Le dîner approche. Voici ce que vous attendiez.</p>
 </td></tr>

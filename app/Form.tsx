@@ -6,9 +6,7 @@ import { DATES, MAX_PER_DATE } from '@/lib/dates'
 const S = {
   wrap: { maxWidth: '520px', width: '100%', fontFamily: '-apple-system, Arial, sans-serif' } as React.CSSProperties,
   header: { textAlign: 'center' as const, padding: '2.5rem 1.5rem', background: '#fff', borderRadius: '16px', marginBottom: '1.5rem', border: '0.5px solid #e8e8e4' },
-  // TODO: remplacer ce placeholder par le logo officiel du CJD Rouen
-  // (déposer l'image dans /public puis utiliser <img src="/logo-cjd-rouen.png" ... />)
-  logo: { display: 'inline-block', fontSize: '13px', fontWeight: 700, letterSpacing: '.16em', textTransform: 'uppercase' as const, color: '#1D9E75', border: '1px solid #1D9E75', borderRadius: '8px', padding: '7px 14px' } as React.CSSProperties,
+  logo: { display: 'block', width: '160px', maxWidth: '60%', height: 'auto', margin: '0 auto' } as React.CSSProperties,
   h1: { color: '#111', fontSize: '22px', fontWeight: 600, margin: '1.25rem 0 0.5rem' },
   sub: { color: '#888', fontSize: '15px', lineHeight: 1.8, margin: 0 },
   intro: { background: '#fff', border: '0.5px solid #e8e8e4', borderRadius: '16px', padding: '1.5rem', marginBottom: '1.5rem', color: '#555', fontSize: '14px', lineHeight: 1.9 } as React.CSSProperties,
@@ -85,7 +83,7 @@ export default function Form() {
 
   if (cancelStatus === 'ok') return (
     <div style={{ ...S.wrap, textAlign: 'center', padding: '3rem 1.5rem', background: '#fff', border: '0.5px solid #e8e8e4', borderRadius: '16px' }}>
-      <div style={S.logo}>CJD Rouen</div>
+      <img src="/logo-cjd-rouen.svg" alt="CJD Rouen" style={S.logo} />
       <h2 style={{ color: '#111', fontSize: '20px', fontWeight: 600, margin: '1.25rem 0 0.75rem' }}>Absence enregistrée</h2>
       <p style={{ color: '#888', fontSize: '15px', lineHeight: 1.8 }}>Votre place a été libérée. Nous espérons vous retrouver à une prochaine édition.</p>
     </div>
@@ -93,7 +91,7 @@ export default function Form() {
 
   if (status === 'success') return (
     <div style={{ ...S.wrap, textAlign: 'center', padding: '3rem 1.5rem', background: '#fff', border: '0.5px solid #e8e8e4', borderRadius: '16px' }}>
-      <div style={S.logo}>CJD Rouen</div>
+      <img src="/logo-cjd-rouen.svg" alt="CJD Rouen" style={S.logo} />
       {testMode ? (
         <>
           <h2 style={{ color: '#111', fontSize: '20px', fontWeight: 600, margin: '1.25rem 0 0.75rem' }}>🧪 Test effectué</h2>
@@ -123,7 +121,7 @@ export default function Form() {
         </div>
       )}
       <div style={S.header}>
-        <div style={S.logo}>CJD Rouen</div>
+        <img src="/logo-cjd-rouen.svg" alt="CJD Rouen" style={S.logo} />
         <h1 style={S.h1}>Dîner confidentiel</h1>
         <p style={S.sub}>Une soirée pour apprendre à se connaître vraiment !</p>
       </div>

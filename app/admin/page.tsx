@@ -83,7 +83,7 @@ export default function AdminPage() {
     <div style={S.page}>
       <div style={{ maxWidth: '400px', margin: '0 auto' }}>
         <div style={S.header}>
-          <div style={{ display: 'inline-block', fontSize: '13px', fontWeight: 700, letterSpacing: '.16em', textTransform: 'uppercase', color: '#1D9E75', border: '1px solid #1D9E75', borderRadius: '8px', padding: '7px 14px' }}>CJD Rouen</div>
+          <img src="/logo-cjd-rouen.svg" alt="CJD Rouen" style={{ display: 'block', width: '150px', maxWidth: '55%', height: 'auto', margin: '0 auto' }} />
           <h1 style={S.h1}>Espace admin</h1>
           <p style={{ color: '#888', fontSize: '14px', margin: 0 }}>Dîner confidentiel CJD Rouen</p>
         </div>
