@@ -1,5 +1,12 @@
 import { MAX_PER_DATE } from '@/lib/dates'
 
+// URL absolue obligatoire dans les emails. Le domaine Netlify est stable
+// (le QR code imprimé pointe dessus).
+const LOGO_URL = 'https://diner-cjd.netlify.app/logo-cjd-rouen-email.png'
+
+// Logo dans un cadre blanc, pour les en-têtes sombres (#111).
+const logoOnDark = `<table cellpadding="0" cellspacing="0" align="center" style="margin:0 auto 24px;"><tr><td style="background:#ffffff;border-radius:10px;padding:12px 18px;"><img src="${LOGO_URL}" width="150" alt="CJD Rouen" style="display:block;border:0;height:auto;"></td></tr></table>`
+
 export function emailPreInscription({
   prenom,
   nom,
@@ -24,7 +31,7 @@ export function emailPreInscription({
 <tr><td align="center">
 <table width="480" cellpadding="0" cellspacing="0" style="background:#111;border-radius:12px;overflow:hidden;">
 <tr><td style="padding:40px 40px 24px;text-align:center;">
-<p style="display:inline-block;font-size:12px;font-weight:bold;letter-spacing:.16em;text-transform:uppercase;color:#00D556;border:1px solid #00D556;border-radius:8px;padding:7px 14px;margin:0 0 20px;">CJD Rouen</p>
+${logoOnDark}
 <h1 style="color:#fff;font-size:20px;font-weight:500;margin:0 0 8px;">Bonsoir ${prenom},</h1>
 <p style="color:#aaa;font-size:14px;line-height:1.7;margin:0;">
 Votre pré-inscription pour le dîner du <strong style="color:#5DCAA5">${dateLabel}</strong> est bien enregistrée.
@@ -74,7 +81,7 @@ export function emailLieu({
 <tr><td align="center">
 <table width="480" cellpadding="0" cellspacing="0" style="background:#111;border-radius:12px;overflow:hidden;">
 <tr><td style="padding:40px 40px 24px;text-align:center;">
-<p style="display:inline-block;font-size:12px;font-weight:bold;letter-spacing:.16em;text-transform:uppercase;color:#00D556;border:1px solid #00D556;border-radius:8px;padding:7px 14px;margin:0 0 20px;">CJD Rouen</p>
+${logoOnDark}
 <h1 style="color:#fff;font-size:20px;font-weight:500;margin:0 0 8px;">Bonsoir ${prenom},</h1>
 <p style="color:#aaa;font-size:14px;line-height:1.7;margin:0;">Le dîner approche. Voici ce que vous attendiez.</p>
 </td></tr>
@@ -127,7 +134,8 @@ export function emailAdminNouvelleInscription({
 <body style="font-family:Arial,sans-serif;padding:32px;background:#f5f5f5;">
 <table width="480" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:12px;padding:32px;">
 <tr><td>
-<h2 style="margin:0 0 16px;color:#111;">Nouvelle pré-inscription</h2>
+<div style="text-align:center;margin:0 0 20px;"><img src="${LOGO_URL}" width="140" alt="CJD Rouen" style="display:inline-block;border:0;height:auto;"></div>
+<h2 style="margin:0 0 16px;color:#111;text-align:center;">Nouvelle pré-inscription</h2>
 <table style="font-size:14px;line-height:2;width:100%;">
 <tr><td style="color:#888;padding-right:16px;">Nom</td><td><strong>${prenom} ${nom}</strong></td></tr>
 <tr><td style="color:#888;">Email</td><td>${email}</td></tr>
