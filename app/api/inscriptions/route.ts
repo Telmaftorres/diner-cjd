@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import nodemailer from 'nodemailer'
-import { emailPreInscription, emailAdminNouvelleInscription } from '@/lib/emails'
+import { emailAdminNouvelleInscription } from '@/lib/emails'
 import { DATES, MAX_PER_DATE } from '@/lib/dates'
 import crypto from 'crypto'
 
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
 
   // En mode test, on n'applique ni la limite de places ni le contrôle de doublon
   // (pour pouvoir tester autant de fois qu'on veut), mais on écrit quand même la
-  // ligne — marquée is_test — et on envoie les emails.
+  // ligne — marquée is_test.
   if (!isTest) {
     const { count } = await supabaseAdmin
       .from('inscriptions')
@@ -50,16 +50,16 @@ export async function POST(req: NextRequest) {
     if ((count ?? 0) >= MAX_PER_DATE)
       return NextResponse.json({ error: 'Complet' }, { status: 409 })
 
+    // Une seule inscription par personne, toutes dates confondues.
     const { data: existing } = await supabaseAdmin
       .from('inscriptions')
       .select('id')
       .eq('email', email)
-      .eq('date_id', dateId)
       .eq('annule', false)
       .eq('is_test', false)
-      .single()
+      .limit(1)
 
-    if (existing)
+    if (existing && existing.length > 0)
       return NextResponse.json({ error: 'Déjà inscrit' }, { status: 409 })
   }
 
@@ -95,9 +95,8 @@ export async function POST(req: NextRequest) {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!
   const tag = isTest ? '[TEST] ' : ''
 
-  const { html, subject } = emailPreInscription({ prenom, nom, dateLabel, cancelToken, baseUrl })
-  await sendEmail(email, tag + subject, html)
-
+  // Pas d'email au participant : il voit l'écran de confirmation, et c'est
+  // l'organisation qui revient vers lui selon les places. On notifie juste l'admin.
   try {
     const admin = emailAdminNouvelleInscription({
       prenom, nom, email, tel, dateLabel,

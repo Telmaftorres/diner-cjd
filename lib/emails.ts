@@ -7,59 +7,6 @@ const LOGO_URL = 'https://diner-cjd.netlify.app/logo-cjd-rouen-email.png'
 // Logo dans un cadre blanc, pour les en-têtes sombres (#111).
 const logoOnDark = `<table cellpadding="0" cellspacing="0" align="center" style="margin:0 auto 24px;"><tr><td style="background:#ffffff;border-radius:10px;padding:12px 18px;"><img src="${LOGO_URL}" width="150" alt="CJD Rouen" style="display:block;border:0;height:auto;"></td></tr></table>`
 
-export function emailPreInscription({
-  prenom,
-  nom,
-  dateLabel,
-  cancelToken,
-  baseUrl,
-}: {
-  prenom: string
-  nom: string
-  dateLabel: string
-  cancelToken: string
-  baseUrl: string
-}) {
-  const cancelUrl = `${baseUrl}/annuler?token=${cancelToken}`
-  return {
-    subject: 'Dîner confidentiel — votre pré-inscription est enregistrée',
-    html: `<!DOCTYPE html>
-<html lang="fr">
-<head><meta charset="UTF-8"></head>
-<body style="margin:0;padding:0;background:#f5f5f5;font-family:Arial,sans-serif;">
-<table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 20px;">
-<tr><td align="center">
-<table width="480" cellpadding="0" cellspacing="0" style="background:#111;border-radius:12px;overflow:hidden;">
-<tr><td style="padding:40px 40px 24px;text-align:center;">
-${logoOnDark}
-<h1 style="color:#fff;font-size:20px;font-weight:500;margin:0 0 8px;">Bonsoir ${prenom},</h1>
-<p style="color:#aaa;font-size:14px;line-height:1.7;margin:0;">
-Votre pré-inscription pour le dîner du <strong style="color:#5DCAA5">${dateLabel}</strong> est bien enregistrée.
-</p>
-</td></tr>
-<tr><td style="padding:0 40px 24px;">
-<div style="background:#0a1a0a;border:0.5px solid #1D9E75;border-radius:8px;padding:20px;">
-<p style="color:#9FE1CB;font-size:13px;line-height:1.7;margin:0;">
-Il s'agit d'une pré-inscription : une <strong style="color:#5DCAA5">confirmation vous sera envoyée par email</strong> selon les places disponibles.<br><br>
-Le lieu exact vous sera communiqué au dernier moment, et vous découvrirez les convives à votre arrivée.
-</p>
-</div>
-</td></tr>
-<tr><td style="padding:0 40px 32px;">
-<p style="color:#555;font-size:12px;line-height:1.7;margin:0;">
-Si un imprévu vous empêchait de venir, vous pouvez
-<a href="${cancelUrl}" style="color:#888;">signaler votre absence ici</a>
-— cela permettra à quelqu'un d'autre de participer.
-</p>
-</td></tr>
-</table>
-</td></tr>
-</table>
-</body>
-</html>`,
-  }
-}
-
 export function emailLieu({
   prenom,
   dateLabel,

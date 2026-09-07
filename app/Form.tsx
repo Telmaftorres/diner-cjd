@@ -73,8 +73,8 @@ export default function Form() {
     } else {
       const d = await res.json()
       setErrorMsg(
-        d.error === 'Complet' ? 'Cette date est complète.' :
-        d.error === 'Déjà inscrit' ? 'Vous êtes déjà pré-inscrit pour cette date.' :
+        d.error === 'Complet' ? 'Cette date est déjà complète.' :
+        d.error === 'Déjà inscrit' ? 'Vous êtes déjà inscrit à un dîner (une seule inscription par personne).' :
         'Une erreur est survenue.'
       )
       setStatus('error')
@@ -96,7 +96,7 @@ export default function Form() {
         <>
           <h2 style={{ color: '#111', fontSize: '20px', fontWeight: 600, margin: '1.25rem 0 0.75rem' }}>🧪 Test effectué</h2>
           <p style={{ color: '#888', fontSize: '15px', lineHeight: 1.8 }}>
-            Les emails de test viennent d'être envoyés à <strong>{fields.email}</strong> et à l'admin.<br />
+            L'email de notification <strong>[TEST]</strong> vient d'être envoyé à l'admin.<br />
             Cette inscription est marquée « test » et n'occupe aucune place.
           </p>
         </>
@@ -117,7 +117,7 @@ export default function Form() {
     <div style={S.wrap}>
       {testMode && (
         <div style={{ background: '#fff8e1', border: '0.5px solid #f0d9a8', borderRadius: '12px', padding: '12px 16px', marginBottom: '1rem', fontSize: '13px', color: '#a9821f', textAlign: 'center', lineHeight: 1.6 }}>
-          🧪 <strong>Mode test</strong> — aucune vraie pré-inscription ne sera créée,<br />mais les emails sont réellement envoyés.
+          🧪 <strong>Mode test</strong> — aucune place occupée, aucun contrôle de doublon,<br />mais l'email de notification admin est réellement envoyé.
         </div>
       )}
       <div style={S.header}>
