@@ -98,7 +98,7 @@ export default function Form() {
         <>
           <h2 style={{ color: '#111', fontSize: '20px', fontWeight: 600, margin: '1.25rem 0 0.75rem' }}>🧪 Test effectué</h2>
           <p style={{ color: '#888', fontSize: '15px', lineHeight: 1.8 }}>
-            Les emails <strong>[TEST]</strong> viennent d'être envoyés à <strong>{fields.email}</strong> et à l'admin.<br />
+            L'email <strong>[TEST]</strong> vient d'être envoyé à l'admin.<br />
             Cette inscription est marquée « test » et n'occupe aucune place.
           </p>
         </>
@@ -107,7 +107,7 @@ export default function Form() {
           <h2 style={{ color: '#111', fontSize: '20px', fontWeight: 600, margin: '1.25rem 0 0.75rem' }}>Merci, {fields.prenom} !</h2>
           <p style={{ color: '#888', fontSize: '15px', lineHeight: 1.8 }}>
             Votre place pour le dîner{selectedLabel ? ` du ${selectedLabel}` : ''} est réservée.<br />
-            Vous recevez un email de confirmation.<br /><br />
+            <br />
             Le lieu ? Il vous parviendra au dernier moment.
           </p>
         </>
@@ -119,7 +119,7 @@ export default function Form() {
     <div style={S.wrap}>
       {testMode && (
         <div style={{ background: '#fff8e1', border: '0.5px solid #f0d9a8', borderRadius: '12px', padding: '12px 16px', marginBottom: '1rem', fontSize: '13px', color: '#a9821f', textAlign: 'center', lineHeight: 1.6 }}>
-          🧪 <strong>Mode test</strong> — aucune place occupée, aucun contrôle de doublon,<br />mais les emails sont réellement envoyés.
+          🧪 <strong>Mode test</strong> — aucune place occupée, aucun contrôle de doublon,<br />mais l'email admin est réellement envoyé.
         </div>
       )}
       <div style={S.header}>
@@ -204,7 +204,7 @@ export default function Form() {
       </button>
 
       <p style={{ textAlign: 'center', fontSize: '12px', color: '#ccc', marginTop: '1.5rem', lineHeight: 1.6 }}>
-        Une seule inscription par personne, dans la limite de 7 places par dîner.<br />Vous recevez aussitôt un email de confirmation.
+        Une seule inscription par personne, dans la limite de 7 places par dîner.
       </p>
     </div>
   )

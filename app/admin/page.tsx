@@ -32,7 +32,6 @@ const S = {
   sectionTitle: { fontSize: '16px', fontWeight: 600, color: '#111', margin: '2.5rem 0 1rem' } as React.CSSProperties,
   smallInput: { width: '100%', padding: '11px 13px', border: '0.5px solid #ddd', borderRadius: '9px', background: '#fff', color: '#111', fontSize: '15px', outline: 'none', boxSizing: 'border-box' as const },
   lieuSave: { padding: '11px 16px', background: '#fff', color: '#111', border: '0.5px solid #ccc', borderRadius: '9px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' as const } as React.CSSProperties,
-  lieuSend: { padding: '11px 16px', background: '#1D9E75', color: '#fff', border: 'none', borderRadius: '9px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' as const } as React.CSSProperties,
   err: { fontSize: '13px', color: '#E24B4A', marginTop: '6px', textAlign: 'center' as const },
 }
 
@@ -95,22 +94,6 @@ export default function AdminPage() {
     setBusy('')
     if (res.ok) { setEdits(e => { const n = { ...e }; delete n[dateId]; return n }); load() }
     else alert('Erreur à l’enregistrement.')
-  }
-
-  const sendLieu = async (dateId: string, dateLabel: string, info?: DinerInfo) => {
-    const { lieu, horaire } = editVal(dateId, info)
-    if (!lieu.trim()) { alert('Renseigne d’abord le lieu.'); return }
-    if (!confirm(`Envoyer le lieu (${lieu}) aux inscrits du ${dateLabel} ?`)) return
-    setBusy('send:' + dateId)
-    const res = await fetch('/api/admin/send-lieu', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ adminSecret: secret, dateId, lieu, horaire }),
-    })
-    const d = await res.json().catch(() => ({}))
-    setBusy('')
-    if (res.ok && d.ok) { alert(`Envoyé à ${d.sent} inscrit(s).`); load() }
-    else alert(d.error === 'Aucun inscrit' ? 'Aucun inscrit pour cette date.' : 'Erreur à l’envoi.')
   }
 
   const exportExcel = () => {
@@ -243,9 +226,6 @@ export default function AdminPage() {
                 />
                 <button style={S.lieuSave} onClick={() => saveLieu(d.id, info)} disabled={busy === 'save:' + d.id}>
                   {busy === 'save:' + d.id ? '…' : 'Enregistrer'}
-                </button>
-                <button style={S.lieuSend} onClick={() => sendLieu(d.id, d.label, info)} disabled={busy === 'send:' + d.id}>
-                  {busy === 'send:' + d.id ? 'Envoi…' : 'Envoyer aux inscrits'}
                 </button>
               </div>
             </div>
