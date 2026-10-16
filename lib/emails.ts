@@ -1,5 +1,3 @@
-import { MAX_PER_DATE } from '@/lib/dates'
-
 // URL absolue obligatoire dans les emails. Le domaine Netlify est stable
 // (le QR code imprimé pointe dessus).
 const LOGO_URL = 'https://diner-cjd.netlify.app/logo-cjd-rouen-email.png'
@@ -39,7 +37,7 @@ export function emailAdminNouvelleInscription({
 <tr><td style="color:#888;">Email</td><td>${email}</td></tr>
 <tr><td style="color:#888;">Téléphone</td><td>${tel}</td></tr>
 <tr><td style="color:#888;">Date choisie</td><td><strong>${dateLabel}</strong></td></tr>
-<tr><td style="color:#888;">Inscrits</td><td><strong>${totalInscrits} / ${MAX_PER_DATE}</strong></td></tr>
+<tr><td style="color:#888;">Inscrits</td><td><strong>${totalInscrits}</strong></td></tr>
 </table>
 <div style="margin-top:24px;padding-top:24px;border-top:0.5px solid #e8e8e4;text-align:center;">
 <a href="${adminUrl}" style="display:inline-block;padding:12px 24px;background:#111;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600;">Voir tous les inscrits</a>

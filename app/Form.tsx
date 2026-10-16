@@ -1,7 +1,7 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { DATES, MAX_PER_DATE } from '@/lib/dates'
+import { DATES } from '@/lib/dates'
 
 const S = {
   wrap: { maxWidth: '520px', width: '100%', fontFamily: '-apple-system, Arial, sans-serif' } as React.CSSProperties,
@@ -36,7 +36,6 @@ export default function Form() {
   const cancelStatus = params.get('cancel')
   const testMode = params.get('test') === '1'
 
-  const [counts, setCounts] = useState<Record<string, number>>({})
   const [selected, setSelected] = useState<string | null>(null)
   const [fields, setFields] = useState({ prenom: '', nom: '', tel: '', email: '' })
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -44,10 +43,6 @@ export default function Form() {
   const [errorMsg, setErrorMsg] = useState('')
 
   const selectedLabel = DATES.find(d => d.id === selected)?.label ?? ''
-
-  useEffect(() => {
-    fetch('/api/counts').then(r => r.json()).then(setCounts)
-  }, [])
 
   const set = (k: string, v: string) => setFields(f => ({ ...f, [k]: v }))
 
@@ -75,7 +70,7 @@ export default function Form() {
     } else {
       const d = await res.json()
       setErrorMsg(
-        d.error === 'Complet' ? 'Cette date est déjà complète.' :
+        d.error === 'Date annulée' ? 'Ce dîner est annulé, merci de choisir une autre date.' :
         d.error === 'Déjà inscrit' ? 'Vous êtes déjà inscrit à un dîner (une seule inscription par personne).' :
         'Une erreur est survenue.'
       )
@@ -106,9 +101,10 @@ export default function Form() {
         <>
           <h2 style={{ color: '#111', fontSize: '20px', fontWeight: 600, margin: '1.25rem 0 0.75rem' }}>Merci, {fields.prenom} !</h2>
           <p style={{ color: '#888', fontSize: '15px', lineHeight: 1.8 }}>
-            Votre place pour le dîner{selectedLabel ? ` du ${selectedLabel}` : ''} est réservée.<br />
+            Votre inscription pour le dîner{selectedLabel ? ` du ${selectedLabel}` : ''} est bien enregistrée.<br />
             <br />
-            Le lieu ? Il vous parviendra au dernier moment.
+            Les places étant limitées, les 7 convives seront sélectionnés parmi les inscrits.<br />
+            Nous reviendrons vers vous si vous êtes retenu.
           </p>
         </>
       )}
@@ -119,7 +115,7 @@ export default function Form() {
     <div style={S.wrap}>
       {testMode && (
         <div style={{ background: '#fff8e1', border: '0.5px solid #f0d9a8', borderRadius: '12px', padding: '12px 16px', marginBottom: '1rem', fontSize: '13px', color: '#a9821f', textAlign: 'center', lineHeight: 1.6 }}>
-          🧪 <strong>Mode test</strong> — aucune place occupée, aucun contrôle de doublon,<br />mais l'email admin est réellement envoyé.
+          🧪 <strong>Mode test</strong> — inscription marquée test, aucun contrôle de doublon,<br />mais l'email admin est réellement envoyé.
         </div>
       )}
       <div style={S.header}>
@@ -181,7 +177,7 @@ export default function Form() {
       <p style={S.hint}>Tous les dîners à 19h, à 10 min max autour de Rouen.</p>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
         {DATES.map(d => {
-          const full = (counts[d.id] ?? 0) >= MAX_PER_DATE && !testMode
+          const full = !!d.annule
           const sel = selected === d.id
           return (
             <button
@@ -191,7 +187,7 @@ export default function Form() {
               onClick={() => { setSelected(d.id); setErrors(e => ({ ...e, date: '' })) }}
             >
               <div style={{ fontWeight: 600, fontSize: '14px' }}>{d.label}</div>
-              <div style={{ fontSize: '12px', opacity: .6, marginTop: '3px' }}>{full ? 'complet' : d.sub}</div>
+              <div style={{ fontSize: '12px', opacity: .6, marginTop: '3px' }}>{full ? 'annulé' : d.sub}</div>
             </button>
           )
         })}
@@ -204,7 +200,7 @@ export default function Form() {
       </button>
 
       <p style={{ textAlign: 'center', fontSize: '12px', color: '#ccc', marginTop: '1.5rem', lineHeight: 1.6 }}>
-        Une seule inscription par personne, dans la limite de 7 places par dîner.
+        Une seule inscription par personne.<br />7 convives par dîner, sélectionnés parmi les inscrits.
       </p>
     </div>
   )

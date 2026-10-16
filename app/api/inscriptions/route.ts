@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import nodemailer from 'nodemailer'
 import { emailAdminNouvelleInscription } from '@/lib/emails'
-import { DATES, MAX_PER_DATE } from '@/lib/dates'
+import { DATES } from '@/lib/dates'
 import crypto from 'crypto'
 
 const transporter = nodemailer.createTransport({
@@ -33,23 +33,14 @@ export async function POST(req: NextRequest) {
 
   const date = DATES.find(d => d.id === dateId)
   if (!date) return NextResponse.json({ error: 'Date invalide' }, { status: 400 })
+  if (date.annule) return NextResponse.json({ error: 'Date annulée' }, { status: 409 })
 
   const dateLabel = date.label
 
-  // En mode test, on n'applique ni la limite de places ni le contrôle de doublon
+  // En mode test, on n'applique pas le contrôle de doublon
   // (pour pouvoir tester autant de fois qu'on veut), mais on écrit quand même la
   // ligne — marquée is_test.
   if (!isTest) {
-    const { count } = await supabaseAdmin
-      .from('inscriptions')
-      .select('*', { count: 'exact', head: true })
-      .eq('date_id', dateId)
-      .eq('annule', false)
-      .eq('is_test', false)
-
-    if ((count ?? 0) >= MAX_PER_DATE)
-      return NextResponse.json({ error: 'Complet' }, { status: 409 })
-
     // Une seule inscription par personne, toutes dates confondues.
     const { data: existing } = await supabaseAdmin
       .from('inscriptions')

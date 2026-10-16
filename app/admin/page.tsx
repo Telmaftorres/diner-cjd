@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { DATES, MAX_PER_DATE } from '@/lib/dates'
+import { DATES } from '@/lib/dates'
 
 type Inscrit = {
   prenom: string
@@ -164,7 +164,7 @@ export default function AdminPage() {
           <div key={date} style={{ background: '#fff', borderRadius: '12px', border: '0.5px solid #e8e8e4', marginBottom: '1rem', overflow: 'hidden' }}>
             <div style={{ padding: '14px 20px', borderBottom: '0.5px solid #e8e8e4', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span style={{ fontWeight: 600, fontSize: '15px', color: '#111' }}>{date}</span>
-              <span style={{ fontSize: '13px', color: liste.length >= MAX_PER_DATE ? '#E24B4A' : '#1D9E75', fontWeight: 600 }}>{liste.length} / {MAX_PER_DATE}</span>
+              <span style={{ fontSize: '13px', color: '#1D9E75', fontWeight: 600 }}>{liste.length} inscrit{liste.length > 1 ? 's' : ''}</span>
             </div>
             <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: '13px' }}>
               <thead>
