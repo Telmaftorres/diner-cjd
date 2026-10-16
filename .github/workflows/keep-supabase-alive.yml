@@ -1,0 +1,22 @@
+name: Garder Supabase actif
+
+# Chaque jour : interroge la base via /api/admin/health pour éviter que
+# Supabase (offre gratuite) ne mette le projet en pause faute d'activité.
+# Si Supabase ne répond pas, le job échoue et GitHub envoie une alerte.
+
+on:
+  schedule:
+    - cron: '0 7 * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase
+        run: |
+          RES=$(curl -sS --max-time 60 -X POST ${{ secrets.APP_URL }}/api/admin/health \
+            -H "Content-Type: application/json" \
+            -d "$(jq -n --arg s '${{ secrets.ADMIN_SECRET }}' '{adminSecret: $s}')")
+          echo "$RES" | jq -c '.results.supabase_inscriptions'
+          echo "$RES" | jq -e '.results.supabase_inscriptions.ok == true' > /dev/null
