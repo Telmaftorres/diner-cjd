@@ -103,8 +103,7 @@ export default function Form() {
           <p style={{ color: '#888', fontSize: '15px', lineHeight: 1.8 }}>
             Votre inscription pour le dîner{selectedLabel ? ` du ${selectedLabel}` : ''} est bien enregistrée.<br />
             <br />
-            Les places étant limitées, 7 convives seront sélectionnés parmi les pré-inscrits.<br />
-            Nous reviendrons vers vous si vous êtes retenu.
+            Les places étant limitées, nous reviendrons vers vous si vous êtes retenu.
           </p>
         </>
       )}
