@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
 
   const date = DATES.find(d => d.id === dateId)
   if (!date) return NextResponse.json({ error: 'Date invalide' }, { status: 400 })
-  if (date.annule) return NextResponse.json({ error: 'Date annulée' }, { status: 409 })
+  if (date.grise) return NextResponse.json({ error: 'Date indisponible' }, { status: 409 })
 
   const dateLabel = date.label
 

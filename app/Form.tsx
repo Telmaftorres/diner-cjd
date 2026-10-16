@@ -70,7 +70,7 @@ export default function Form() {
     } else {
       const d = await res.json()
       setErrorMsg(
-        d.error === 'Date annulée' ? 'Ce dîner est annulé, merci de choisir une autre date.' :
+        d.error === 'Date indisponible' ? 'Cette date n’est plus disponible, merci d’en choisir une autre.' :
         d.error === 'Déjà inscrit' ? 'Vous êtes déjà inscrit à un dîner (une seule inscription par personne).' :
         'Une erreur est survenue.'
       )
@@ -103,7 +103,7 @@ export default function Form() {
           <p style={{ color: '#888', fontSize: '15px', lineHeight: 1.8 }}>
             Votre inscription pour le dîner{selectedLabel ? ` du ${selectedLabel}` : ''} est bien enregistrée.<br />
             <br />
-            Les places étant limitées, les 7 convives seront sélectionnés parmi les inscrits.<br />
+            Les places étant limitées, 8 convives seront sélectionnés parmi les pré-inscrits.<br />
             Nous reviendrons vers vous si vous êtes retenu.
           </p>
         </>
@@ -177,7 +177,7 @@ export default function Form() {
       <p style={S.hint}>Tous les dîners à 19h, à 10 min max autour de Rouen.</p>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
         {DATES.map(d => {
-          const full = !!d.annule
+          const full = !!d.grise
           const sel = selected === d.id
           return (
             <button
@@ -187,7 +187,7 @@ export default function Form() {
               onClick={() => { setSelected(d.id); setErrors(e => ({ ...e, date: '' })) }}
             >
               <div style={{ fontWeight: 600, fontSize: '14px' }}>{d.label}</div>
-              <div style={{ fontSize: '12px', opacity: .6, marginTop: '3px' }}>{full ? 'annulé' : d.sub}</div>
+              <div style={{ fontSize: '12px', opacity: .6, marginTop: '3px' }}>{d.sub}</div>
             </button>
           )
         })}
@@ -200,7 +200,7 @@ export default function Form() {
       </button>
 
       <p style={{ textAlign: 'center', fontSize: '12px', color: '#ccc', marginTop: '1.5rem', lineHeight: 1.6 }}>
-        Une seule inscription par personne.<br />7 convives par dîner, sélectionnés parmi les inscrits.
+        8 convives seront sélectionnés parmi les pré-inscrits.
       </p>
     </div>
   )
