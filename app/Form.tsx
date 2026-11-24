@@ -173,7 +173,7 @@ export default function Form() {
       </div>
 
       <div style={S.sectionLabel}>Choisissez votre date</div>
-      <p style={S.hint}>Tous les dîners à 19h, à 10 min max autour de Rouen.</p>
+      <p style={S.hint}>Tous les dîners ont lieu à 10 min max autour de Rouen.</p>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
         {DATES.map(d => {
           const full = !!d.grise
